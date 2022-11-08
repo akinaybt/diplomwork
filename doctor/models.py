@@ -1,4 +1,5 @@
 from django.db import models
+from multiselectfield import MultiSelectField
 from clinic.models import Department
 
 
@@ -8,10 +9,14 @@ class Doctor(models.Model):
     surname = models.CharField(max_length=50)
     experience = models.PositiveIntegerField()
 
+    def __str__(self):
+        """Returns the doctor's full name."""
+        return '%s %s' % (self.name, self.surname)
+
 
 class Schedule(models.Model):
     doctor = models.OneToOneField('Doctor', on_delete=models.CASCADE)
-    WEEKDAYS = [
+    WEEKDAYS = (
         ('Пн', 'Понедельник'),
         ('Вт', 'Вторник'),
         ('Ср', 'Среда'),
@@ -19,8 +24,8 @@ class Schedule(models.Model):
         ('Пт', 'Пятница'),
         ('Сб', 'Суббота'),
         ('Вс', 'Воскресенье'),
-             ]
-    weekday = models.IntegerField(choices=WEEKDAYS)
+    )
+    weekday = MultiSelectField(max_length=5, choices=WEEKDAYS)
     # working_time = models.DurationField()
 
 
