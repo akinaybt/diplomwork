@@ -1,21 +1,28 @@
+from django.conf import settings
 from django.db import models
 from multiselectfield import MultiSelectField
 from clinic.models import Department
+# from patient.models import CustomUser
 
 
-class Doctor(models.Model):
-    department = models.OneToOneField(Department, on_delete=models.PROTECT)
+class DoctorUser(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
+
+
+class DoctorProfile(models.Model):
+    user = models.OneToOneField(DoctorUser, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    department = models.OneToOneField(Department, on_delete=models.PROTECT)
     experience = models.PositiveIntegerField()
 
     def __str__(self):
         """Returns the doctor's full name."""
-        return '%s %s' % (self.name, self.surname)
+        return '%s %s' % (self.name, self.last_name)
 
 
 class Schedule(models.Model):
-    doctor = models.OneToOneField('Doctor', on_delete=models.CASCADE)
+    doctor = models.OneToOneField('DoctorProfile', on_delete=models.CASCADE)
     WEEKDAYS = (
         ('Пн', 'Понедельник'),
         ('Вт', 'Вторник'),
@@ -26,15 +33,6 @@ class Schedule(models.Model):
         ('Вс', 'Воскресенье'),
     )
     weekday = MultiSelectField(max_length=5, choices=WEEKDAYS)
-    # working_time = models.DurationField()
-
-
-
-# import datetime as datetime_class # забыл добавить в ответ
-#
-# duration = datetime.strptime(duration, "%H:%M")
-# x_duration =datetime_class.timedelta(hours=duration.hour, minutes=duration.minute, seconds=duration.second).total_seconds()
-# duration = timedelta(seconds = x_duration)
 
 
 
