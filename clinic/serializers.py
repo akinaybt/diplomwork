@@ -2,17 +2,17 @@ from rest_framework import serializers
 from .models import Clinic, Department
 
 
-class ClinicSerializer(serializers.Serializer):
+class ClinicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Clinic
         fields = '__all__'
 
 
-class DepartmentSerializer(serializers.Serializer):
+class DepartmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Department
-        fields = '__all__'
+        fields = ('id', 'title', 'head_doctor')
 
 
