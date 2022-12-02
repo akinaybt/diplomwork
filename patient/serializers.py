@@ -1,9 +1,11 @@
 from django.contrib.auth.hashers import make_password
+from django.utils.timezone import datetime
 
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from phonenumber_field.serializerfields import PhoneNumberField
-
+from doctor.models import Schedule
 from .models import UserProfile, CustomUser, Appointment
 
 
@@ -24,6 +26,19 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     def get_schedule_name(self, obj):
         return f"{obj.schedule}"
+
+    def validate(self, data):
+        appointment_time = data.get('appointment_time')
+        schedule = data.get('schedule')
+
+        if not (appointment_time >= schedule.start_time and appointment_time <= schedule.end_time):
+            raise ValidationError(
+                {
+                    'appointment_time': 'Выбранное Вами время является неподходящим, так как доктор в это время не работает'
+                }
+            )
+        return data
+
 
     class Meta:
         model = Appointment
