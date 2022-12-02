@@ -1,29 +1,41 @@
 from django.conf import settings
 from django.db import models
 from multiselectfield import MultiSelectField
-from clinic.models import Department
+from clinic.models import Department, Clinic
+
+
 # from patient.models import CustomUser
 
 
 class DoctorUser(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = 'Доктор'
+        verbose_name_plural = 'Доктора'
 
-class DoctorProfile(models.Model):
-    user = models.OneToOneField(DoctorUser, on_delete=models.CASCADE, primary_key=True)
-    name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    department = models.OneToOneField(Department, on_delete=models.PROTECT)
-    experience = models.PositiveIntegerField()
 
     def __str__(self):
         """Returns the doctor's full name."""
-        return '%s %s' % (self.name, self.last_name)
+        return f'{self.user}'
 
 
-class Schedule(models.Model):
-    doctor = models.OneToOneField('DoctorProfile', on_delete=models.CASCADE)
-    WEEKDAYS = (
+class DoctorProfile(models.Model):
+    user = models.OneToOneField(DoctorUser, on_delete=models.CASCADE)
+    clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE, related_name='doctors_profiles', null=True)
+    department = models.ForeignKey(Department, on_delete=models.PROTECT, null=True)
+    experience = models.PositiveIntegerField(default=2)
+
+    class Meta:
+        verbose_name = 'Профиль доктора'
+        verbose_name_plural = 'Профили докторов'
+
+    def __str__(self):
+        """Returns the doctor's full name."""
+        return f"{self.user}"
+
+
+WEEKDAYS = (
         ('Пн', 'Понедельник'),
         ('Вт', 'Вторник'),
         ('Ср', 'Среда'),
@@ -32,7 +44,22 @@ class Schedule(models.Model):
         ('Сб', 'Суббота'),
         ('Вс', 'Воскресенье'),
     )
-    weekday = MultiSelectField(max_length=5, choices=WEEKDAYS)
+
+
+class Schedule(models.Model):
+    doctor = models.OneToOneField(DoctorProfile, on_delete=models.CASCADE)
+    weekday = MultiSelectField(max_length=20, choices=WEEKDAYS)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    class Meta:
+        verbose_name = 'График работы доктора'
+        verbose_name_plural = 'Графики работы докторов'
+
+    def __str__(self):
+        return f"График доктора - {self.doctor}"
+
+
 
 
 
