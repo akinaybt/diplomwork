@@ -7,15 +7,29 @@ class PhoneNumberSerializer(serializers.Serializer):
     number = PhoneNumberField(region='KG')
 
 
-class DoctorProfileSerializer(serializers.Serializer):
+class DoctorProfileSerializer(serializers.ModelSerializer):
+    user_name = serializers.SerializerMethodField()
+    department_name = serializers.SerializerMethodField()
+
+    def get_user_name(self, obj):
+        return f"{obj.user}"
+
+    def get_department_name(self, obj):
+        return f"{obj.department}"
 
     class Meta:
         model = DoctorProfile
-        fields = '__all__'
+        fields = (
+            'id',
+            'user',
+            'user_name',
+            'department',
+            'department_name',
+            'experience',
+        )
 
 
-class ScheduleSerializer(serializers.Serializer):
-    weekday = fields.MultipleChoiceField(choices=WEEKDAYS)
+class ScheduleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Schedule
@@ -27,18 +41,15 @@ class ScheduleSerializer(serializers.Serializer):
         )
 
 
-class CustomUserSerializer(serializers.ModelSerializer):
+class DoctorUserSerializer(serializers.ModelSerializer):
+    doctor_name = serializers.SerializerMethodField()
+
+    def get_doctor_name(self, obj):
+        return f"{obj.user.first_name} {obj.user.last_name}"
 
     class Meta:
         model = DoctorUser
-        fields = (
-            'id',
-            'username',
-            'first_name',
-            'last_name',
-            'email',
-            'phone_number'
-        )
+        fields = '__all__'
 
 
 
