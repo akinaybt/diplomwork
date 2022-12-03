@@ -5,6 +5,8 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from phonenumber_field.serializerfields import PhoneNumberField
+from rest_framework import validators
+
 from doctor.models import Schedule
 from .models import UserProfile, CustomUser, Appointment
 
@@ -30,6 +32,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
     def validate(self, data):
         appointment_time = data.get('appointment_time')
         schedule = data.get('schedule')
+        appointment_date = data.get('appointment_date')
 
         if not (appointment_time >= schedule.start_time and appointment_time <= schedule.end_time):
             raise ValidationError(
@@ -37,8 +40,14 @@ class AppointmentSerializer(serializers.ModelSerializer):
                     'appointment_time': 'Выбранное Вами время является неподходящим, так как доктор в это время не работает'
                 }
             )
-        return data
+        a = appointment_date.datetime.isoweekday()
+        # if appointment_time in Appointment.appointment_time and appointment_date in Appointment.appointment_date:
+        #     raise ValidationError({
+        #         'appointment_time': "Выбранные Вами время и дата уже являются занятыми. Просим Вас выбрать другое время"
+        #     })
+        # print(data)
 
+        return data
 
     class Meta:
         model = Appointment
@@ -55,6 +64,12 @@ class AppointmentSerializer(serializers.ModelSerializer):
             'appointment_time',
             'confirm_appointment',
         )
+        # validators = [
+        #     validators.UniqueTogetherValidator(
+        #         queryset=Appointment.objects.all(),
+        #         fields=['appointment_time', 'appointment_date']
+        #     )
+        # ]
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -90,4 +105,3 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = '__all__'
-
