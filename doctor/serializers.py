@@ -1,6 +1,7 @@
-from rest_framework import fields, serializers
+from django.utils.dates import WEEKDAYS
+from rest_framework import serializers
 from phonenumber_field.serializerfields import PhoneNumberField
-from .models import DoctorProfile, Schedule, DoctorUser, WEEKDAYS
+from .models import DoctorProfile, Schedule, DoctorUser
 
 
 class PhoneNumberSerializer(serializers.Serializer):
@@ -50,11 +51,3 @@ class DoctorUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = DoctorUser
         fields = '__all__'
-
-
-
-# class MyModelSerializer(serializers.HyperlinkedModelSerializer):
-#     # ...
-#     my_field = fields.MultipleChoiceField(choices=MY_CHOICES)
-#     my_field2 = fields.MultipleChoiceField(choices=MY_CHOICES2)
-#     # ...
