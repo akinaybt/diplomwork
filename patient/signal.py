@@ -1,7 +1,7 @@
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import UserProfile, CustomUser, Appointment
-from doctor.models import DoctorProfile, DoctorUser
+from .models import UserProfile, CustomUser
+from doctor.models import DoctorUser
 
 
 @receiver(post_save, sender=CustomUser)
