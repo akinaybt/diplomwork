@@ -10,21 +10,21 @@ class CustomUser(AbstractUser):
     is_patient = models.BooleanField(default=True)
     phone_number = PhoneNumberField(null=True, unique=True, region='KG')
 
+
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
 
-GENDER = (
-    ('Male', "Мужчина"),
-    ('Female', 'Женщина')
-)
-
-
 class UserProfile(models.Model):
+    GENDER = (
+        ('Male', "Мужчина"),
+        ('Female', 'Женщина')
+    )
+
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile',
                                 primary_key=True)
     gender = models.CharField(max_length=30, choices=GENDER)
-    phone_number = PhoneNumberField(null=True, unique=True, region='KG')
+    phone_number = PhoneNumberField(null=True, unique=True, region='KG', verbose_name='Номер телефона')
 
     def __str__(self):
         """Returns the patient's full name."""
@@ -36,8 +36,8 @@ class Appointment(models.Model):
     referred_department = models.ForeignKey(Department, on_delete=models.CASCADE, null=False)
     referred_doctor = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE, null=False)
     schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, null=False)
-    appointment_date = models.DateField(null=False)
-    appointment_time = models.TimeField(null=False)
+    appointment_date = models.DateField()
+    appointment_time = models.TimeField()
     confirm_appointment = models.BooleanField(default=False, null=False)
 
     def __str__(self):
