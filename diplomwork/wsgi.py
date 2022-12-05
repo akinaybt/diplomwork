@@ -8,7 +8,7 @@ path = '/home/bekmambetova/diplomwork'
 if path not in sys.path:
     sys.path.insert(0, path)
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'diplomwork.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'diplomwork/diplomwork.settings'
 
 ## Uncomment the lines below depending on your Django version
 ###### then, for Django >=1.5:
