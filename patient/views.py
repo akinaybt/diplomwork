@@ -23,7 +23,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [IsAuthenticated, IsProfileOrReadOnly]
+
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
