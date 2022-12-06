@@ -42,11 +42,15 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'drf_yasg',
+    'openapi_core',
     'rest_framework_simplejwt',
     'multiselectfield',
     'django_filters',
 
     "phonenumber_field",
+
+    "corsheaders",
+
 
     'doctor.apps.DoctorConfig',
     'clinic.apps.ClinicConfig',
@@ -62,6 +66,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
 ]
 
 ROOT_URLCONF = 'diplomwork.urls'
@@ -153,3 +159,17 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        }
+    },
+}
+
+REDOC_SETTINGS = {
+   'LAZY_RENDERING': False,
+}
+
+
