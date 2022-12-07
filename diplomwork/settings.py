@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'drf_yasg',
-    'openapi_core',
     'rest_framework_simplejwt',
     'multiselectfield',
     'django_filters',
