@@ -12,6 +12,7 @@ from doctor.serializers import ScheduleSerializer
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
+    # permission_classes = [IsAuthenticated]
 
     @action(detail=True, methods=['GET'], name='schedule', url_path='schedule')
     def get_schedule(self, request, *args, **kwargs):
@@ -25,10 +26,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     serializer_class = CustomUserSerializer
 
 
-
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated, IsProfileOrReadOnly]
-
-

@@ -16,7 +16,7 @@ class Clinic(models.Model):
 
 
 class Department(models.Model):
-    clinic = models.ForeignKey('Clinic', on_delete=models.PROTECT)
+    clinic = models.ForeignKey(Clinic, on_delete=models.PROTECT)
     title = models.CharField(max_length=200, null=False, blank=True)
     head_doctor = models.CharField(max_length=100, null=False, blank=True)
 

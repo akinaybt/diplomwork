@@ -40,13 +40,17 @@ class AppointmentSerializer(serializers.ModelSerializer):
                     'appointment_time': 'Выбранное Вами время является неподходящим, так как доктор в это время не работает'
                 }
             )
-        a = appointment_date.datetime.isoweekday()
-        # if appointment_time in Appointment.appointment_time and appointment_date in Appointment.appointment_date:
-        #     raise ValidationError({
-        #         'appointment_time': "Выбранные Вами время и дата уже являются занятыми. Просим Вас выбрать другое время"
-        #     })
-        # print(data)
-
+        appointment_detail = Appointment.objects.filter(
+            appointment_time=appointment_time,
+            appointment_date=appointment_date,
+            referred_doctor=schedule.doctor
+        ).exists()
+        if appointment_detail:
+            raise ValidationError(
+                {
+                    'appointment_time': 'Назначение на это время уже существует. Выберите другое время.'
+                }
+            )
         return data
 
     class Meta:
@@ -64,12 +68,6 @@ class AppointmentSerializer(serializers.ModelSerializer):
             'appointment_time',
             'confirm_appointment',
         )
-        # validators = [
-        #     validators.UniqueTogetherValidator(
-        #         queryset=Appointment.objects.all(),
-        #         fields=['appointment_time', 'appointment_date']
-        #     )
-        # ]
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -84,7 +82,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'email',
             'phone_number'
         )
-        # read_only_fields = ('password',)
 
         extra_kwargs = {
             'password': {'write_only': True}

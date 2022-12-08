@@ -8,6 +8,6 @@ router = DefaultRouter()
 router.register('doctors', views.DoctorProfileViewSet)
 
 urlpatterns = [
-    # path('', include(router.urls)),
+    path('', include(router.urls)),
     path('doctors-list/', views.DoctorUserListView.as_view()),
 ]

@@ -4,9 +4,6 @@ from multiselectfield import MultiSelectField
 from clinic.models import Department, Clinic
 
 
-# from patient.models import CustomUser
-
-
 class DoctorUser(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
@@ -31,7 +28,7 @@ class DoctorProfile(models.Model):
         verbose_name_plural = 'Профили докторов'
 
     def __str__(self):
-        """Returns the doctor's full name."""
+        """Возвращает полное имя доктора"""
         return f"{self.user}"
 
 
@@ -57,9 +54,5 @@ class Schedule(models.Model):
         verbose_name_plural = 'Графики работы докторов'
 
     def __str__(self):
+        """ Возвращает график, принадлежащий определённому доктору."""
         return f"График доктора - {self.doctor}"
-
-
-
-
-

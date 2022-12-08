@@ -7,15 +7,16 @@ import phonenumbers
 
 
 class CustomUser(AbstractUser):
+    """Модель CustomUser для регистрации пользователей."""
     is_patient = models.BooleanField(default=True)
     phone_number = PhoneNumberField(null=True, unique=True, region='KG')
-
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
 
 class UserProfile(models.Model):
+    """Модель UserProfile предназначена для профиля пользователя."""
     GENDER = (
         ('Male', "Мужчина"),
         ('Female', 'Женщина')
@@ -27,7 +28,7 @@ class UserProfile(models.Model):
     phone_number = PhoneNumberField(null=True, unique=True, region='KG', verbose_name='Номер телефона')
 
     def __str__(self):
-        """Returns the patient's full name."""
+        """Возвращает полное имя пациента."""
         return f"{self.user}'s profile"
 
 
@@ -41,5 +42,7 @@ class Appointment(models.Model):
     confirm_appointment = models.BooleanField(default=False, null=False)
 
     def __str__(self):
+        """Возвращает приём пациента."""
         return f"Приём у {self.patient}"
+
 

@@ -31,7 +31,7 @@ class ClinicTest(TestCase):
             'title': "Больница №2",
             'foundation_date': '2021-01-21',
         }
-    )
+                                    )
 
         self.assertEqual(response.status_code, 201)
 
@@ -53,12 +53,13 @@ class DepartmentTest(TestCase):
             'title': "Больница №1",
             'foundation_date': '2022-02-22',
         }
+
+        clinic_object = Clinic.objects.create(**clinic)
         department_data = {
-            'clinic': clinic,
+            'clinic': clinic_object,
             'title': 'Педиатрия',
             'head_doctor': 'Name of doctor'
         }
-        clinic_object = Clinic.objects.create(**clinic)
         department = Department.objects.create(**department_data)
 
     def test_department_detail(self):
@@ -74,26 +75,33 @@ class DepartmentTest(TestCase):
         self.assertEqual(response.status_code, 204)
 
     def test_department_create(self):
-        url = reverse('department-list')
-        response = self.client.post(url, data={
-            'clinic': self.clinic,
-            'title': 'Хирургия',
-            'head_doctor': 'Name of doctor'
+        clinic = {
+            'title': "Больница №1",
+            'foundation_date': '2022-02-22',
         }
-    )
 
+        clinic_object = Clinic.objects.create(**clinic)
+        data = {
+            'clinic': clinic_object.id,
+            'title': 'Хирургия',
+            'head_doctor': 'Name of doctor',
+        }
+        url = reverse('department-list')
+        response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, 201)
 
     def test_department_update(self):
+        clinic = {
+            'title': "Больница №1",
+            'foundation_date': '2022-02-22',
+            'hospital_director': 'Name of hospital_director'
+        }
         department = Department.objects.first()
-
         url = reverse('department-detail', args=(department.pk,))
         response = self.client.put(url, data={
-            'clinic': self.clinic,
+            'clinic': Clinic.objects.update(**clinic),
             'title': ' Онкология',
             'head_doctor': 'Name of doctor'
         }, content_type='application/json')
 
         self.assertEqual(response.status_code, 200)
-
-

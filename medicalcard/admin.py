@@ -2,5 +2,11 @@ from django.contrib import admin
 from .models import Card, MakeAppointment
 
 
-admin.site.register(Card)
-admin.site.register(MakeAppointment)
+@admin.register(Card)
+class Card(admin.ModelAdmin):
+    list_display = ['patient']
+
+
+@admin.register(MakeAppointment)
+class MakeAppointment(admin.ModelAdmin):
+    list_display = ['id']

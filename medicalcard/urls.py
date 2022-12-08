@@ -11,4 +11,3 @@ urlpatterns = [
     path('card-destroy/', views.CardDestroyAPIView.as_view()),
     path('card-list/', views.CardListAPIView.as_view())
 ]
-

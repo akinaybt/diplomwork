@@ -1,8 +1,8 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.permissions import BasePermission
 
 
-class IsProfileOrReadOnly(BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.method in SAFE_METHODS:
-            return True
-        return obj.user == request.user
+class DoctorPermission(BasePermission):
+    def has_permission(self, request, view):
+        """ Permission class, написанный кастомно для модели DoctorUser. Пользователь должен иметь объект пользователя,
+        связанный с моделью DoctorUser, чтобы иметь доступ к данным"""
+        return bool(request.user and hasattr(request.user, 'doctoruser'))

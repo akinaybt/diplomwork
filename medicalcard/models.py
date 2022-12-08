@@ -25,6 +25,3 @@ class Card(models.Model):
 
     def __str__(self):
         return f"Медицинская карточка {self.patient}"
-
-
-

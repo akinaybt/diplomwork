@@ -11,12 +11,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+
+from corsheaders.defaults import default_headers
 from decouple import config, Csv
 import psycopg2
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -28,7 +29,6 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
-
 
 # Application definition
 
@@ -50,7 +50,6 @@ INSTALLED_APPS = [
 
     "corsheaders",
 
-
     'doctor.apps.DoctorConfig',
     'clinic.apps.ClinicConfig',
     'patient.apps.PatientConfig',
@@ -67,6 +66,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "corsheaders.middleware.CorsPostCsrfMiddleware",
 ]
 
 ROOT_URLCONF = 'diplomwork.urls'
@@ -74,8 +74,7 @@ ROOT_URLCONF = 'diplomwork.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,23 +89,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'diplomwork.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-     'postgresql': {
-         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-         'NAME': config("DATABASE_NAME"), 'USER': config("DATABASE_USER"),
-         'PASSWORD': config("DATABASE_PASSWORD"),
-         # 'HOST': config("HOST"),
-         # 'PORT': config("PORT")
+    'postgresql': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config("DATABASE_NAME"), 'USER': config("DATABASE_USER"),
+        'PASSWORD': config("DATABASE_PASSWORD"),
+        # 'HOST': config("HOST"),
+        # 'PORT': config("PORT")
 
     },
 }
 DATABASES['default'] = DATABASES['postgresql']
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -126,7 +122,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -138,20 +133,18 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 AUTH_USER_MODEL = 'patient.CustomUser'
-# AUTH_USER_MODEL2 = 'doctor.DoctorUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -168,7 +161,24 @@ SWAGGER_SETTINGS = {
 }
 
 REDOC_SETTINGS = {
-   'LAZY_RENDERING': False,
+    'LAZY_RENDERING': False,
 }
 
 
+# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_HEADERS = list(default_headers) + [
+#     "observe",
+# ]
+# CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOW_CREDENTIALS = True
+# CORS_ORIGIN_WHITELIST = [
+#     "http://192.168.88.14:3000/",
+#     "http://192.168.89.49:8000/",
+# ]
+#
+#
+# CORS_ORIGIN_REGEX_WHITELIST = [
+#     'http://akinay1.pythonanywhere.com',
+#     'http://192.168.89.49',
+#     'http://192.168.88.14'
+# ]

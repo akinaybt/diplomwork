@@ -1,12 +1,9 @@
 from rest_framework import serializers
-from patient.models import Appointment
 from .models import Card, MakeAppointment
-from patient.serializers import AppointmentSerializer
-
-""" CardSerializer сериалайзер для модели Card"""
 
 
 class CardSerializer(serializers.ModelSerializer):
+    """ CardSerializer сериалайзер для модели Card"""
     patient_name = serializers.SerializerMethodField()
 
     def get_patient_name(self, obj):
@@ -26,6 +23,7 @@ class CardSerializer(serializers.ModelSerializer):
 
 
 class MakeAppointmentSerializer(serializers.ModelSerializer):
+    """ MakeAppointmentSerializer сериалайзер для модели MakeAppointment"""
     class Meta:
         model = MakeAppointment
         fields = (
@@ -34,7 +32,3 @@ class MakeAppointmentSerializer(serializers.ModelSerializer):
             'treatment',
             'medicine',
         )
-
-
-
-
