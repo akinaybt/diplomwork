@@ -10,7 +10,7 @@ from doctor.serializers import DoctorProfileSerializer
 class ClinicViewSet(viewsets.ModelViewSet):
     queryset = Clinic.objects.all()
     serializer_class = ClinicSerializer
-
+    """Представление ClinicViewSet предназначено для модели Clinic."""
     @action(detail=True, methods=['GET'], name='doctor', url_path='doctors_list')
     def get_appointment_detail(self, request, *args, **kwargs):
         obj = self.get_object()
@@ -20,5 +20,9 @@ class ClinicViewSet(viewsets.ModelViewSet):
 
 
 class DepartmentViewSet(viewsets.ModelViewSet):
+    """
+    Представление DepartmentViewSet написано для модели Department.
+    Реализовывает CRUD(Create,Read,Update,Delete) для  отделения.
+    """
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer

@@ -14,7 +14,9 @@ from pathlib import Path
 
 from corsheaders.defaults import default_headers
 from decouple import config, Csv
+import sys
 import psycopg2
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +30,10 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
+# SECURITY WARNING: don't run with debug turned on in production!
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split()
+
 
 # Application definition
 
@@ -97,8 +102,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': config("DATABASE_NAME"), 'USER': config("DATABASE_USER"),
         'PASSWORD': config("DATABASE_PASSWORD"),
-        # 'HOST': config("HOST"),
-        # 'PORT': config("PORT")
+        'HOST': config("HOST"),
+        'PORT': config("PORT")
 
     },
 }
@@ -164,21 +169,24 @@ REDOC_SETTINGS = {
     'LAZY_RENDERING': False,
 }
 
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "observe",
+]
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+    "http://192.168.88.14:3000/",
+    "http://192.168.89.49:8000/",
+]
 
-# CORS_ALLOW_ALL_ORIGINS = True
-# CORS_ALLOW_HEADERS = list(default_headers) + [
-#     "observe",
-# ]
-# CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ALLOW_CREDENTIALS = True
-# CORS_ORIGIN_WHITELIST = [
-#     "http://192.168.88.14:3000/",
-#     "http://192.168.89.49:8000/",
-# ]
-#
-#
-# CORS_ORIGIN_REGEX_WHITELIST = [
-#     'http://akinay1.pythonanywhere.com',
-#     'http://192.168.89.49',
-#     'http://192.168.88.14'
-# ]
+
+CORS_ORIGIN_REGEX_WHITELIST = [
+    'http://akinay1.pythonanywhere.com',
+    'http://192.168.89.49',
+    'http://192.168.88.14'
+]
+
+if 'test' in sys.argv or 'test\_coverage' in sys.argv:  # Covers regular testing and django-coverage
+    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
+    DATABASES['default']['NAME'] = ':memory:'

@@ -1,9 +1,12 @@
 from rest_framework import serializers
-from .models import Card, MakeAppointment
+from .models import Card
 
 
 class CardSerializer(serializers.ModelSerializer):
-    """ CardSerializer сериалайзер для модели Card"""
+    """
+    CardSerializer сериалайзер для модели Card.
+    Нужен для преобразования данных модели Card в формат JSON.
+    """
     patient_name = serializers.SerializerMethodField()
 
     def get_patient_name(self, obj):
@@ -19,16 +22,4 @@ class CardSerializer(serializers.ModelSerializer):
             'birth_date',
             'blood_group',
             'appointment',
-        )
-
-
-class MakeAppointmentSerializer(serializers.ModelSerializer):
-    """ MakeAppointmentSerializer сериалайзер для модели MakeAppointment"""
-    class Meta:
-        model = MakeAppointment
-        fields = (
-            'id',
-            'diagnosis',
-            'treatment',
-            'medicine',
         )

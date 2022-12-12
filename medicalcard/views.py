@@ -1,7 +1,7 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
-from .models import Card, MakeAppointment
-from .serializers import CardSerializer, MakeAppointmentSerializer
+from .models import Card
+from .serializers import CardSerializer
 
 
 class CardCreateAPIView(generics.CreateAPIView):
@@ -38,8 +38,3 @@ class CardListAPIView(generics.ListAPIView):
     serializer_class = CardSerializer
     permission_classes = [IsAuthenticated]
 
-
-class MakeAppointmentAPIView(generics.CreateAPIView):
-    queryset = MakeAppointment.objects.all()
-    serializer_class = MakeAppointmentSerializer
-    permission_classes = [IsAuthenticated]

@@ -1,13 +1,12 @@
 from rest_framework import serializers
-from phonenumber_field.serializerfields import PhoneNumberField
 from .models import DoctorProfile, Schedule, DoctorUser
 
 
-class PhoneNumberSerializer(serializers.Serializer):
-    number = PhoneNumberField(region='KG')
-
-
 class DoctorProfileSerializer(serializers.ModelSerializer):
+    """
+    DoctorProfileSerializer сериалайзер, написанный для модели DoctorProfile.
+    Нужен для преобразования данных модели DoctorProfile в формат JSON.
+    """
     user_name = serializers.SerializerMethodField()
     department_name = serializers.SerializerMethodField()
 
@@ -30,7 +29,10 @@ class DoctorProfileSerializer(serializers.ModelSerializer):
 
 
 class ScheduleSerializer(serializers.ModelSerializer):
-
+    """
+    ScheduleSerializer сериалайзер, написанный для модели Schedule.
+    Нужен для преобразования данных модели Schedule в формат JSON.
+    """
     class Meta:
         model = Schedule
         fields = (
@@ -42,6 +44,10 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
 
 class DoctorUserSerializer(serializers.ModelSerializer):
+    """
+    DoctorUserSerializer сериалайзер, написанный для модели DoctorUser.
+    Нужен для преобразования данных модели Doctor в формат JSON.
+    """
     doctor_name = serializers.SerializerMethodField()
 
     def get_doctor_name(self, obj):

@@ -27,12 +27,17 @@ class UserProfile(models.Model):
     gender = models.CharField(max_length=30, choices=GENDER)
     phone_number = PhoneNumberField(null=True, unique=True, region='KG', verbose_name='Номер телефона')
 
+    class Meta:
+        verbose_name = 'Профиль пользователя'
+        verbose_name_plural = 'Профили пользователей'
+
     def __str__(self):
         """Возвращает полное имя пациента."""
         return f"{self.user}'s profile"
 
 
 class Appointment(models.Model):
+    """Модель Appointment предназначена для создания приёмов. """
     patient = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=False)
     referred_department = models.ForeignKey(Department, on_delete=models.CASCADE, null=False)
     referred_doctor = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE, null=False)
@@ -41,8 +46,10 @@ class Appointment(models.Model):
     appointment_time = models.TimeField()
     confirm_appointment = models.BooleanField(default=False, null=False)
 
+    class Meta:
+        verbose_name = 'Приём'
+        verbose_name_plural = 'Приёмы'
+
     def __str__(self):
         """Возвращает приём пациента."""
         return f"Приём у {self.patient}"
-
-

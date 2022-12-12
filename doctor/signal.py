@@ -5,6 +5,7 @@ from .models import DoctorProfile, DoctorUser
 
 @receiver(post_save, sender=DoctorUser)
 def create_doctor_profile(sender, instance, created, **kwargs):
+    """ Сигнал, который автоматически создаёт объект модели DoctorUser. """
     if created:
         print('Doctor signal received!')
         DoctorProfile.objects.create(

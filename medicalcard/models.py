@@ -2,17 +2,10 @@ from django.db import models
 from patient.models import UserProfile, Appointment
 
 
-class MakeAppointment(models.Model):
-    diagnosis = models.CharField(max_length=255, null=True)
-    treatment = models.TextField(null=True)
-    medicine = models.TextField(null=True)
-
-    class Meta:
-        verbose_name = 'Назначить приём'
-        verbose_name_plural = 'Назначить приём'
-
-
 class Card(models.Model):
+    """
+    Модель Card нужна для создания медицинской карточки пользователя.
+    """
     patient = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
     allergies = models.CharField(max_length=100, null=True)
     birth_date = models.DateField()

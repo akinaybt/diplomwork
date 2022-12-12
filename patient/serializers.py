@@ -1,17 +1,15 @@
 from django.contrib.auth.hashers import make_password
-from django.utils.timezone import datetime
-
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-
 from phonenumber_field.serializerfields import PhoneNumberField
-from rest_framework import validators
-
-from doctor.models import Schedule
 from .models import UserProfile, CustomUser, Appointment
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
+    """
+    AppointmentSerializer сериалайзер для модели Appointment.
+    Нужен для преобразования данных модели Appointment в формат JSON.
+    """
     patient_name = serializers.SerializerMethodField()
     department_title = serializers.SerializerMethodField()
     doctor_name = serializers.SerializerMethodField()
@@ -71,6 +69,10 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    """
+    CustomUserSerializer сериалайзер для модели CustomUser.
+    Нужен для преобразования данных модели CustomUser в формат JSON.
+    """
     class Meta:
         model = CustomUser
         fields = (
@@ -97,6 +99,10 @@ class PhoneNumberSerializer(serializers.Serializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    """
+    UserProfileSerializer сериалайзер для модели UserProfile.
+    Нужен для преобразования данных модели UserProfile в формат JSON.
+    """
     user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
